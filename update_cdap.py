@@ -109,6 +109,12 @@ def update_cdap(iter_, input_path, output_path):
     workbook.save(cal_out)
     workbook.close()
 
+    excel = win32.gencache.EnsureDispatch('Excel.Application')
+    workbook = excel.Workbooks.Open(abspath(cal_out))
+    workbook.Save()
+    workbook.Close()
+    excel.Quit()
+
 
 if __name__ == '__main__':
     update_cdap(
