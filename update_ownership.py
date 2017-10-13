@@ -1,5 +1,6 @@
 #! /usr/bin/env/python
 
+import argparse
 import shutil
 import sys
 
@@ -8,6 +9,23 @@ import pandas as pd
 import win32com.client as win32
 from xlrd import open_workbook
 from xlutils.copy import copy
+
+
+PARSER = argparse.ArgumentParser(
+    description='Update the auto ownership workbooks and uec.')
+PARSER.add_argument(
+    'iteration', metavar='Iteration', type=int, default=0,
+    help='The current calibration iteration number.'
+)
+PARSER.add_argument(
+    '-rp', '--results_path', metavar='Results_Path', type=str,
+    default='../../newpopsyn',
+    help='The path to the directory containing the abm output and uec ' +
+    'directories.')
+PARSER.add_argument(
+    '-op', '--output_path', metavar='Output_Path', type=str, default='',
+    help='The path to the directory containing the model calibration files.')
+ARGS = PARSER.parse_args()
 
 
 def update_auto_ownership_uec(arg):
