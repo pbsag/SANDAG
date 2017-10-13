@@ -49,9 +49,13 @@ def update_auto_ownership(iter_, input_path, output_path):
 
     Parameters
     ----------
-    arg : int
-    The calibration iteration number. This number will be appended to the end
-    of the aoResults file and 1_AO Calibration file stored in the directory.
+    iter_ : int
+        The calibration iteration number.
+    input_path : str
+        The relative path to the directory containing the output and uec
+        directories.
+    output_path : str
+        The relative path to the directory containing the calibration files.
 
     """
     res_path = input_path + '/output/aoResults.csv'
