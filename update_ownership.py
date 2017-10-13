@@ -28,7 +28,7 @@ PARSER.add_argument(
 ARGS = PARSER.parse_args()
 
 
-def update_auto_ownership_uec(iter_, input_path, output_path):
+def update_auto_ownership(iter_, input_path, output_path):
     """Aggregate model results, calculate constants, and update the UEC.
 
     Parameters
@@ -85,5 +85,5 @@ def update_auto_ownership_uec(iter_, input_path, output_path):
 
 
 if __name__ == '__main__':
-    update_auto_ownership_uec(
+    update_auto_ownership(
         ARGS.iteration, ARGS.input_path, ARGS.output_path)
