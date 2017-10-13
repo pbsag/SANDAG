@@ -58,39 +58,32 @@ def update_auto_ownership(iter_, input_path, output_path):
         The relative path to the directory containing the calibration files.
 
     """
-    res_path = input_path + '/output/aoResults.csv'
-    out = output_path + f'/aoResults-{iter_}.csv'
-    shutil.copy2(res_path, out)
-    model_results = pd.read_csv(out)
-    new_values = model_results.groupby('AO').HHID.count().values
+    shutil.copy2(input_path + '/output/aoResults.csv',
+                 output_path + f'/aoResults-{iter_}.csv')
+    model_results = pd.read_csv(output_path + f'/aoResults-{iter_}.csv')
     if iter_ <= 1:
-        wb_name = '1_AO Calibration.xlsx'
+        wb_name = output_path + '/1_AO Calibration.xlsx'
     else:
-        wb_name = f'1_AO Calibration_{iter_ - 1}.xlsx'
+        wb_name = output_path + f'/1_AO Calibration_{iter_ - 1}.xlsx'
     workbook = load_workbook(wb_name, data_only=True)
-    ao = workbook['AO']
-    prev_constants = []
-    for cell in ao['L'][3:8]:
-        prev_constants.append(cell.value)
+    prev_constants = [cell.value for cell in workbook['AO']['L'][3:8]]
     workbook.close()
     workbook = load_workbook(wb_name)
     replace_values(workbook['AO']['K'][3:8], prev_constants)
     replace_values(workbook['_data']['B'][1:6],
                    model_results.groupby('AO').HHID.count().values)
 
-    workbook.save(f'1_AO Calibration_{iter_}.xlsx')
+    cal_out = output_path + f'/1_AO Calibration_{iter_}.xlsx'
+    workbook.save(cal_out)
 
     excel = win32.gencache.EnsureDispatch('Excel.Application')
-    workbook = excel.Workbooks.Open(
-        'T:/projects/sr13/develop/2014Calibration/Model Calibration/1_AO/' +
-        f'1_AO Calibration_{iter_}.xlsx')
+    workbook = excel.Workbooks.Open(osp.abspath(cal_out))
     workbook.Save()
     workbook.Close()
     excel.Quit()
 
-    workbook = load_workbook(f'1_AO Calibration_{iter_}.xlsx', data_only=True)
-    auto_ownership = workbook['AO']
-    new_constants = [cell.value for cell in auto_ownership['L'][3:8]]
+    workbook = load_workbook(cal_out, data_only=True)
+    new_constants = [cell.value for cell in workbook['AO']['L'][3:8]]
     uec_path = input_path + '/uec/AutoOwnership.xls'
     ao_uec = open_workbook(uec_path, formatting_info=True)
     workbook = copy(ao_uec)
