@@ -58,6 +58,8 @@ def update_auto_ownership(iter_, input_path, output_path):
         The relative path to the directory containing the calibration files.
 
     """
+    cal_out = output_path + f'/1_AO Calibration_{iter_}.xlsx'
+    uec_path = input_path + '/uec/AutoOwnership.xls'
     shutil.copy2(input_path + '/output/aoResults.csv',
                  output_path + f'/aoResults-{iter_}.csv')
     model_results = pd.read_csv(output_path + f'/aoResults-{iter_}.csv')
@@ -65,16 +67,26 @@ def update_auto_ownership(iter_, input_path, output_path):
         wb_name = output_path + '/1_AO Calibration.xlsx'
     else:
         wb_name = output_path + f'/1_AO Calibration_{iter_ - 1}.xlsx'
+
     workbook = load_workbook(wb_name, data_only=True)
     prev_constants = [cell.value for cell in workbook['AO']['L'][3:8]]
     workbook.close()
+
     workbook = load_workbook(wb_name)
-    replace_values(workbook['AO']['K'][3:8], prev_constants)
     replace_values(workbook['_data']['B'][1:6],
                    model_results.groupby('AO').HHID.count().values)
+    if iter_ > 0:
+        replace_values(workbook['AO']['K'][3:8], prev_constants)
+    else:
+        ao_uec = open_workbook(uec_path)
+        ao_sheet = ao_uec.sheet_by_index(1)
+        prev_constants = [
+            ao_sheet.cell_value(rowx=81, colx=6 + idx) for idx in range(5)]
+        ao_uec.release_resources()
+        replace_values(workbook['AO']['K'][3:8], prev_constants)
 
-    cal_out = output_path + f'/1_AO Calibration_{iter_}.xlsx'
     workbook.save(cal_out)
+    workbook.close()
 
     excel = win32.gencache.EnsureDispatch('Excel.Application')
     workbook = excel.Workbooks.Open(osp.abspath(cal_out))
@@ -84,7 +96,8 @@ def update_auto_ownership(iter_, input_path, output_path):
 
     workbook = load_workbook(cal_out, data_only=True)
     new_constants = [cell.value for cell in workbook['AO']['L'][3:8]]
-    uec_path = input_path + '/uec/AutoOwnership.xls'
+    workbook.close()
+
     ao_uec = open_workbook(uec_path, formatting_info=True)
     workbook = copy(ao_uec)
     auto_ownership = workbook.get_sheet(1)
