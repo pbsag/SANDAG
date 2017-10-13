@@ -33,6 +33,22 @@ PARSER.add_argument(
 ARGS = PARSER.parse_args()
 
 
+def replace_values(dest, data):
+    """Replace the values in dest with those in data.
+
+    Parameters
+    ----------
+    dest : tuple
+        Tuple containing openpyxl.cell.cell's.
+    data : array
+        Array containing data to write into the cells in dest.
+    """
+    if len(dest) != len(data):
+        raise ValueError('Length of dest and data should be the same.')
+    for cell, value in zip(dest, data):
+        cell.value = value
+
+
 def update(method=None):
     pass
 
