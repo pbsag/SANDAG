@@ -3,6 +3,7 @@
 import argparse
 import shutil
 
+from openpyxl import load_workbook
 import pandas as pd
 
 
@@ -57,6 +58,18 @@ def update_cdap(iter_, input_path, output_path):
         'College Student'
     res_vals = res_vals.sort_values(['type', 'activity_pattern'])[0].values
 
+    if iter_ <= 1:
+        wb_name = output_path + '/2_CDAP Calibration.xlsx'
+    else:
+        wb_name = output_path + f'/2_CDAP Calibration_{iter_ - 1}.xlsx'
+
+    if iter_ > 0:
+        workbook = load_workbook(wb_name, data_only=True)
+        prev_m_const = [workbook['CDAP'].cell(row=30 + idx, column=9).value
+                        for idx in range(8)]
+        prev_n_const = [workbook['CDAP'].cell(row=30 + idx, column=10).value
+                        for idx in range(8)]
+        workbook.close()
 
 
 if __name__ == '__main__':
