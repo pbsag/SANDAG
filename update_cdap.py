@@ -63,7 +63,7 @@ def update_cdap(iter_, input_path, output_path):
     shutil.copy2(input_path + '/output/personData_3.csv',
                  output_path + f'/personData_{iter_}.csv')
 
-    results = pd.read_csv(output_path + f'/aoResults-{iter_}.csv')
+    results = pd.read_csv(output_path + f'/personData_{iter_}.csv')
     res_vals = results.groupby(['type', 'activity_pattern']).size()\
         .reset_index()
     res_vals.loc[res_vals.type == 'Child too young for school', 'type'] = \
