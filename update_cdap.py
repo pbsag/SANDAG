@@ -25,6 +25,22 @@ PARSER.add_argument(
 ARGS = PARSER.parse_args()
 
 
+def replace_values(dest, data):
+    """Replace the values in dest with those in data.
+
+    Parameters
+    ----------
+    dest : tuple
+        Tuple containing openpyxl.cell.cell's.
+    data : array
+        Array containing data to write into the cells in dest.
+    """
+    if len(dest) != len(data):
+        raise ValueError('Length of dest and data should be the same.')
+    for cell, value in zip(dest, data):
+        cell.value = value
+
+
 def update_cdap(iter_, input_path, output_path):
     """Aggregate model results, calculate constants, and update the UEC.
 
@@ -70,6 +86,28 @@ def update_cdap(iter_, input_path, output_path):
         prev_n_const = [workbook['CDAP'].cell(row=30 + idx, column=10).value
                         for idx in range(8)]
         workbook.close()
+
+    workbook = load_workbook(wb_name)
+    replace_values(workbook['_data']['E'][1:23], res_vals)
+
+    if iter_ > 0:
+        cal_out = output_path + f'/2_CDAP Calibration_{iter_}.xlsx'
+        replace_values(workbook['CDAP']['C'][29:37], prev_m_const)
+        replace_values(workbook['CDAP']['D'][29:37], prev_n_const)
+    else:
+        cal_out = output_path + '/2_CDAP Calibration.xlsx'
+        ao_uec = open_workbook(uec_path)
+        ao_sheet = ao_uec.sheet_by_index(1)
+        prev_m_const = [
+            ao_sheet.cell_value(rowx=89 + idx, colx=6) for idx in range(8)]
+        prev_n_const = [
+            ao_sheet.cell_value(rowx=89 + idx, colx=7) for idx in range(8)]
+        ao_uec.release_resources()
+        replace_values(workbook['CDAP']['C'][29:37], prev_m_const)
+        replace_values(workbook['CDAP']['D'][29:37], prev_n_const)
+
+    workbook.save(cal_out)
+    workbook.close()
 
 
 if __name__ == '__main__':
