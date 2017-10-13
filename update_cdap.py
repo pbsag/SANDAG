@@ -1,10 +1,14 @@
 #! /usr/bin/env/python
 
 import argparse
+from os.path import abspath
 import shutil
 
 from openpyxl import load_workbook
 import pandas as pd
+import win32com.client as win32
+from xlrd import open_workbook
+from xlutils.copy import copy
 
 
 PARSER = argparse.ArgumentParser(
@@ -114,6 +118,23 @@ def update_cdap(iter_, input_path, output_path):
     workbook.Save()
     workbook.Close()
     excel.Quit()
+
+    workbook = load_workbook(cal_out, data_only=True)
+    new_m_const = [workbook['CDAP'].cell(row=30 + idx, column=9).value
+                   for idx in range(8)]
+    new_n_const = [workbook['CDAP'].cell(row=30 + idx, column=10).value
+                   for idx in range(8)]
+    workbook.close()
+
+    cdap_uec = open_workbook(uec_path, formatting_info=True)
+    workbook = copy(cdap_uec)
+    cdap = workbook.get_sheet(1)
+    for idx, val in enumerate(new_m_const):
+        cdap.write(89 + idx, 6, val)
+    for idx, val in enumerate(new_n_const):
+        cdap.write(89 + idx, 7, val)
+    workbook.save(uec_path)
+    cdap_uec.release_resources()
 
 
 if __name__ == '__main__':
