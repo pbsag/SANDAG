@@ -60,8 +60,8 @@ def update_auto_ownership(iter_, input_path, output_path):
     """
     uec_path = input_path + '/uec/AutoOwnership.xls'
     shutil.copy2(input_path + '/output/aoResults.csv',
-                 output_path + f'/aoResults-{iter_}.csv')
-    model_results = pd.read_csv(output_path + f'/aoResults-{iter_}.csv')
+                 output_path + f'/aoResults_{iter_}.csv')
+    model_results = pd.read_csv(output_path + f'/aoResults_{iter_}.csv')
     if iter_ <= 1:
         wb_name = output_path + '/1_AO Calibration.xlsx'
     else:
