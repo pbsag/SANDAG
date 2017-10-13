@@ -100,13 +100,13 @@ def update_cdap(iter_, input_path, output_path):
         replace_values(workbook['CDAP']['D'][29:37], prev_n_const)
     else:
         cal_out = output_path + '/2_CDAP Calibration.xlsx'
-        ao_uec = open_workbook(uec_path)
-        ao_sheet = ao_uec.sheet_by_index(1)
+        uec = open_workbook(uec_path)
+        sheet = uec.sheet_by_index(1)
         prev_m_const = [
-            ao_sheet.cell_value(rowx=89 + idx, colx=6) for idx in range(8)]
+            sheet.cell_value(rowx=88 + idx, colx=6) for idx in range(8)]
         prev_n_const = [
-            ao_sheet.cell_value(rowx=89 + idx, colx=7) for idx in range(8)]
-        ao_uec.release_resources()
+            sheet.cell_value(rowx=88 + idx, colx=7) for idx in range(8)]
+        uec.release_resources()
         replace_values(workbook['CDAP']['C'][29:37], prev_m_const)
         replace_values(workbook['CDAP']['D'][29:37], prev_n_const)
 
@@ -130,9 +130,9 @@ def update_cdap(iter_, input_path, output_path):
     workbook = copy(cdap_uec)
     cdap = workbook.get_sheet(1)
     for idx, val in enumerate(new_m_const):
-        cdap.write(89 + idx, 6, val)
+        cdap.write(88 + idx, 6, val)
     for idx, val in enumerate(new_n_const):
-        cdap.write(89 + idx, 7, val)
+        cdap.write(88 + idx, 7, val)
     workbook.save(uec_path)
     cdap_uec.release_resources()
 
