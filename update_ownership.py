@@ -58,7 +58,6 @@ def update_auto_ownership(iter_, input_path, output_path):
         The relative path to the directory containing the calibration files.
 
     """
-    cal_out = output_path + f'/1_AO Calibration_{iter_}.xlsx'
     uec_path = input_path + '/uec/AutoOwnership.xls'
     shutil.copy2(input_path + '/output/aoResults.csv',
                  output_path + f'/aoResults-{iter_}.csv')
@@ -76,8 +75,10 @@ def update_auto_ownership(iter_, input_path, output_path):
     replace_values(workbook['_data']['B'][1:6],
                    model_results.groupby('AO').HHID.count().values)
     if iter_ > 0:
+        cal_out = output_path + f'/1_AO Calibration_{iter_}.xlsx'
         replace_values(workbook['AO']['K'][3:8], prev_constants)
     else:
+        cal_out = output_path + '/1_AO Calibration.xlsx'
         ao_uec = open_workbook(uec_path)
         ao_sheet = ao_uec.sheet_by_index(1)
         prev_constants = [
