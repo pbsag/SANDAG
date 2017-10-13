@@ -38,6 +38,8 @@ def replace_values(dest, data):
     data : array
         Array containing data to write into the cells in dest.
     """
+    if len(dest) != len(data):
+        raise ValueError('Length of dest and data should be the same.')
     for cell, value in zip(dest, data):
         cell.value = value
 
