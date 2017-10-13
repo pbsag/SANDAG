@@ -1,8 +1,8 @@
 #! /usr/bin/env/python
 
 import argparse
+import os.path as osp
 import shutil
-import sys
 
 from openpyxl import load_workbook
 import pandas as pd
@@ -23,7 +23,7 @@ PARSER.add_argument(
     help='The path to the directory containing the abm output and uec ' +
     'directories.')
 PARSER.add_argument(
-    '-o', '--output_path', metavar='Output_Path', type=str, default='',
+    '-o', '--output_path', metavar='Output_Path', type=str, default='.',
     help='The path to the directory containing the model calibration files.')
 ARGS = PARSER.parse_args()
 
