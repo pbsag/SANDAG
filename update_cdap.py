@@ -1,6 +1,9 @@
 #! /usr/bin/env/python
 
 import argparse
+import shutil
+
+import pandas as pd
 
 
 PARSER = argparse.ArgumentParser(
@@ -35,6 +38,11 @@ def update_cdap(iter_, input_path, output_path):
         The relative path to the directory containing the calibration files.
 
     """
+    uec_path = input_path + '/uec/CoordinatedDailyActivityPattern.xls'
+    shutil.copy2(input_path + '/output/personData_3.csv',
+                 output_path + f'/personData_{iter_}.csv')
+    model_results = pd.read_csv(output_path + f'/aoResults-{iter_}.csv')
+    cal_out = output_path + f'/2_CDAP Calibration_{iter_}.xlsx'
 
 
 
