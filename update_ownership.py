@@ -67,9 +67,10 @@ def update_auto_ownership(iter_, input_path, output_path):
     else:
         wb_name = output_path + f'/1_AO Calibration_{iter_ - 1}.xlsx'
 
-    workbook = load_workbook(wb_name, data_only=True)
-    prev_constants = [cell.value for cell in workbook['AO']['L'][3:8]]
-    workbook.close()
+    if iter_ > 0:
+        workbook = load_workbook(wb_name, data_only=True)
+        prev_constants = [cell.value for cell in workbook['AO']['L'][3:8]]
+        workbook.close()
 
     workbook = load_workbook(wb_name)
     replace_values(workbook['_data']['B'][1:6],
