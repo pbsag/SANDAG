@@ -1,7 +1,7 @@
 #! /usr/bin/env/python
 
 import argparse
-import os.path as osp
+from os.path import abspath
 import shutil
 
 from openpyxl import load_workbook
@@ -91,7 +91,7 @@ def update_auto_ownership(iter_, input_path, output_path):
     workbook.close()
 
     excel = win32.gencache.EnsureDispatch('Excel.Application')
-    workbook = excel.Workbooks.Open(osp.abspath(cal_out))
+    workbook = excel.Workbooks.Open(abspath(cal_out))
     workbook.Save()
     workbook.Close()
     excel.Quit()
