@@ -28,6 +28,20 @@ PARSER.add_argument(
 ARGS = PARSER.parse_args()
 
 
+def replace_values(dest, data):
+    """Replace the values in dest with those in data.
+
+    Parameters
+    ----------
+    dest : tuple
+        Tuple containing openpyxl.cell.cell's.
+    data : array
+        Array containing data to write into the cells in dest.
+    """
+    for cell, value in zip(dest, data):
+        cell.value = value
+
+
 def update_auto_ownership(iter_, input_path, output_path):
     """Aggregate model results, calculate constants, and update the UEC.
 
@@ -54,12 +68,9 @@ def update_auto_ownership(iter_, input_path, output_path):
         prev_constants.append(cell.value)
     workbook.close()
     workbook = load_workbook(wb_name)
-    ao = workbook['AO']
-    for cell, value in zip(ao['K'][3:8], prev_constants):
-        cell.value = value
-    data = workbook['_data']
-    for cell, value in zip(data['B'][1:6], new_values):
-        cell.value = value
+    replace_values(workbook['AO']['K'][3:8], prev_constants)
+    replace_values(workbook['_data']['B'][1:6],
+                   model_results.groupby('AO').HHID.count().values)
 
     workbook.save(f'1_AO Calibration_{iter_}.xlsx')
 
