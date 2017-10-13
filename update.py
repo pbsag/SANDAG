@@ -49,6 +49,15 @@ def replace_values(dest, data):
         cell.value = value
 
 
+def exec_formulas(cal_path):
+    """Use excel to execute formulas in workbook."""
+    excel = win32.gencache.EnsureDispatch('Excel.Application')
+    workbook = excel.Workbooks.Open(abspath(cal_path))
+    workbook.Save()
+    workbook.Close()
+    excel.Quit()
+
+
 def update(iter_, input_path, output_path, method='AO'):
     """Aggregate model results, calculate constants, and update the UEC.
 
