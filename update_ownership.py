@@ -18,12 +18,12 @@ PARSER.add_argument(
     help='The current calibration iteration number.'
 )
 PARSER.add_argument(
-    '-rp', '--results_path', metavar='Results_Path', type=str,
+    '-i', '--input_path', metavar='Input_Path', type=str,
     default='../../newpopsyn',
     help='The path to the directory containing the abm output and uec ' +
     'directories.')
 PARSER.add_argument(
-    '-op', '--output_path', metavar='Output_Path', type=str, default='',
+    '-o', '--output_path', metavar='Output_Path', type=str, default='',
     help='The path to the directory containing the model calibration files.')
 ARGS = PARSER.parse_args()
 
