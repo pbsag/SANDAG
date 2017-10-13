@@ -22,7 +22,20 @@ ARGS = PARSER.parse_args()
 
 
 def update_cdap(iter_, input_path, output_path):
-    pass
+    """Aggregate model results, calculate constants, and update the UEC.
+
+    Parameters
+    ----------
+    iter_ : int
+        The calibration iteration number.
+    input_path : str
+        The relative path to the directory containing the output and uec
+        directories.
+    output_path : str
+        The relative path to the directory containing the calibration files.
+
+    """
+
 
 
 if __name__ == '__main__':
