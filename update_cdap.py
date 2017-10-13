@@ -78,7 +78,7 @@ def update_cdap(iter_, input_path, output_path):
         'College Student'
     res_vals = res_vals.sort_values(['type', 'activity_pattern'])[0].values
 
-    if iter_ <= 1:
+    if iter_ < 1:
         wb_name = output_path + '/2_CDAP Calibration.xlsx'
     else:
         wb_name = output_path + f'/2_CDAP Calibration_{iter_ - 1}.xlsx'
@@ -94,12 +94,11 @@ def update_cdap(iter_, input_path, output_path):
     workbook = load_workbook(wb_name)
     replace_values(workbook['_data']['E'][1:23], res_vals)
 
+    cal_out = output_path + f'/2_CDAP Calibration_{iter_}.xlsx'
     if iter_ > 0:
-        cal_out = output_path + f'/2_CDAP Calibration_{iter_}.xlsx'
         replace_values(workbook['CDAP']['C'][29:37], prev_m_const)
         replace_values(workbook['CDAP']['D'][29:37], prev_n_const)
     else:
-        cal_out = output_path + '/2_CDAP Calibration.xlsx'
         uec = open_workbook(uec_path)
         sheet = uec.sheet_by_index(1)
         prev_m_const = [

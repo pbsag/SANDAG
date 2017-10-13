@@ -62,7 +62,7 @@ def update_auto_ownership(iter_, input_path, output_path):
     shutil.copy2(input_path + '/output/aoResults.csv',
                  output_path + f'/aoResults_{iter_}.csv')
     results = pd.read_csv(output_path + f'/aoResults_{iter_}.csv')
-    if iter_ <= 1:
+    if iter_ < 1:
         wb_name = output_path + '/1_AO Calibration.xlsx'
     else:
         wb_name = output_path + f'/1_AO Calibration_{iter_ - 1}.xlsx'
@@ -75,11 +75,11 @@ def update_auto_ownership(iter_, input_path, output_path):
     workbook = load_workbook(wb_name)
     replace_values(workbook['_data']['B'][1:6],
                    results.groupby('AO').size().values)
+
+    cal_out = output_path + f'/1_AO Calibration_{iter_}.xlsx'
     if iter_ > 0:
-        cal_out = output_path + f'/1_AO Calibration_{iter_}.xlsx'
         replace_values(workbook['AO']['K'][3:8], prev_constants)
     else:
-        cal_out = output_path + '/1_AO Calibration.xlsx'
         ao_uec = open_workbook(uec_path)
         ao_sheet = ao_uec.sheet_by_index(1)
         prev_constants = [
