@@ -49,8 +49,44 @@ def replace_values(dest, data):
         cell.value = value
 
 
-def update(method=None):
-    pass
+def update(iter_, input_path, output_path, method='AO'):
+    """Aggregate model results, calculate constants, and update the UEC.
+
+    Parameters
+    ----------
+    iter_ : int
+        The calibration iteration number.
+    input_path : str
+        The relative path to the directory containing the output and uec
+        directories.
+    output_path : str
+        The relative path to the directory containing the calibration files.
+    method : str, 'AO' | 'CDAP'
+        The type of update to perform.
+        Default : 'AO'
+        Valid Options :
+        - 'AO' : Update AutoOwnership
+        - 'CDAP' : Update CoordinatedDailyActivityPattern
+
+    """
+    files = {
+        'AO': ['AutoOwnership', 'aoResults', '1_AO Calibration',
+               update_ao],
+        'CDAP': ['CoordinatedDailyActivityPattern', 'personData_3',
+                 '2_CDAP Calibration', update_cdap]}
+
+    cal_path = output_path + f'/{files[method][2]}_{iter_}.xlsx'
+    uec_path = input_path + f'/uec/{files[method][0]}.xls'
+    shutil.copy2(input_path + f'/output/{files[method][1]}.csv',
+                 output_path + f'/{files[method][1]}_{iter_}.csv')
+    results = pd.read_csv(output_path + f'/{files[method][1]}_{iter_}.csv')
+    if iter_ < 1:
+        wb_name = output_path + f'/{files[method][2]}.xlsx'
+    else:
+        wb_name = output_path + f'/{files[method][2]}_{iter_ - 1}.xlsx'
+    files[method][3](iter_, wb_name, results, uec_path, cal_path)
+
+
 
 if __name__ == '__main__':
     update()
