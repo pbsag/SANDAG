@@ -50,7 +50,14 @@ def replace_values(dest, data):
 
 
 def exec_formulas(cal_path):
-    """Use excel to execute formulas in workbook."""
+    """Use excel to execute formulas in workbook.
+
+    Parameters
+    ----------
+    cal_path : string
+        Path to a calibration file.
+
+    """
     excel = win32.gencache.EnsureDispatch('Excel.Application')
     workbook = excel.Workbooks.Open(abspath(cal_path))
     workbook.Save()
