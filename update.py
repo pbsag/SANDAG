@@ -150,13 +150,7 @@ def update_ao(iter_, wb_name, results, uec_path, cal_path):
     new_constants = [cell.value for cell in workbook['AO']['L'][3:8]]
     workbook.close()
 
-    ao_uec = open_workbook(uec_path, formatting_info=True)
-    workbook = copy(ao_uec)
-    auto_ownership = workbook.get_sheet(1)
-    for idx, val in enumerate(new_constants):
-        auto_ownership.write(81, 6 + idx, val)
-    workbook.save(uec_path)
-    ao_uec.release_resources()
+    update_uec(uec_path, 81, 6, new_constants, axis=1)
 
 
 def update_uec(uec_path, startx, starty, values, axis=0, sheet_num=1):
@@ -187,6 +181,7 @@ def update_uec(uec_path, startx, starty, values, axis=0, sheet_num=1):
     else:
         for idx, val in enumerate(values):
             sheet.write(startx, starty + idx, val)
+    workbook.save(uec_path)
     uec.release_resources()
 
 
@@ -256,15 +251,8 @@ def update_cdap(iter_, wb_name, results, uec_path, cal_path):
                    for idx in range(8)]
     workbook.close()
 
-    uec = open_workbook(uec_path, formatting_info=True)
-    workbook = copy(uec)
-    cdap = workbook.get_sheet(1)
-    for idx, val in enumerate(new_m_const):
-        cdap.write(88 + idx, 6, val)
-    for idx, val in enumerate(new_n_const):
-        cdap.write(88 + idx, 7, val)
-    workbook.save(uec_path)
-    uec.release_resources()
+    update_uec(uec_path, 88, 6, new_m_const)
+    update_uec(uec_path, 88, 7, new_n_const)
 
 
 if __name__ == '__main__':
