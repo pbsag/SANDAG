@@ -94,3 +94,27 @@ def setup_abm(working_directory, start_iter=1, sample_rate=None):
     board.tap_key(board.tab_key)
     board.tap_key(board.space_key)
     sleep(1)
+
+
+def launch_abm(working_directory):
+    """Launch the sandag_abm.
+
+    Parameters
+    ----------
+    working_directory : str
+        The path to the directory containing the gisdk and uec directories.
+
+    """
+    board = PyKeyboard()
+    board.tap_key(board.down_key)
+    board.tap_key(board.space_key)
+    sleep(0.5)
+    board.tap_key(board.tab_key, n=3)
+    board.tap_key(board.enter_key)
+    board.type_string(working_directory)
+    board.tap_key(board.enter_key)
+    sleep(0.5)
+    board.tap_key(board.tab_key, n=6)
+    board.tap_key(board.backspace_key)
+    board.tap_key(board.tab_key)
+    board.tap_key(board.enter_key)
