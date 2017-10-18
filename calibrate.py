@@ -12,6 +12,7 @@ import os.path as osp
 import subprocess
 from time import sleep, time
 
+import psutil
 from pymouse import PyMouse
 from pykeyboard import PyKeyboard
 
@@ -21,6 +22,17 @@ from update import update
 FILES = {'AO': ['AutoOwnership', 'aoResults.csv', '1_AO'],
          'CDAP': ['CoordinatedDailyActivityPattern', 'personData_{}.csv',
                   '2_CDAP']}
+
+
+def kill_proc_tree(pid, including_parent=True):
+    parent = psutil.Process(pid)
+    children = parent.children(recursive=True)
+    for child in children:
+        child.kill()
+    _, _ = psutil.wait_procs(children, timeout=5)
+    if including_parent:
+        parent.kill()
+        parent.wait(5)
 
 
 def launch_transcad():
