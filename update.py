@@ -123,23 +123,17 @@ def update_ao(iter_, wb_name, results, uec_path, cal_path):
 
     """
     if iter_ > 0:
-        workbook = load_workbook(wb_name, data_only=True)
-        prev_constants = [cell.value for cell in workbook['AO']['L'][3:8]]
-        workbook.close()
+        prev_const = read_values(wb_name, 3, 11, 5, sheet_num=0)
 
     workbook = load_workbook(wb_name)
     replace_values(workbook['_data']['B'][1:6],
                    results.groupby('AO').size().values)
 
     if iter_ > 0:
-        replace_values(workbook['AO']['K'][3:8], prev_constants)
+        replace_values(workbook['AO']['K'][3:8], prev_const)
     else:
-        ao_uec = open_workbook(uec_path)
-        ao_sheet = ao_uec.sheet_by_index(1)
-        prev_constants = [
-            ao_sheet.cell_value(rowx=81, colx=6 + idx) for idx in range(5)]
-        ao_uec.release_resources()
-        replace_values(workbook['AO']['K'][3:8], prev_constants)
+        prev_const = read_values(uec_path, 81, 6, 5, axis=1)
+        replace_values(workbook['AO']['K'][3:8], prev_const)
 
     workbook.save(cal_path)
     workbook.close()
@@ -251,12 +245,8 @@ def update_cdap(iter_, wb_name, results, uec_path, cal_path):
     res_vals = res.sort_values(['type', 'activity_pattern'])[0].values
 
     if iter_ > 0:
-        workbook = load_workbook(wb_name, data_only=True)
-        prev_m_const = [workbook['CDAP'].cell(row=30 + idx, column=9).value
-                        for idx in range(8)]
-        prev_n_const = [workbook['CDAP'].cell(row=30 + idx, column=10).value
-                        for idx in range(8)]
-        workbook.close()
+        prev_m_const = read_values(wb_name, 30, 9, 8, sheet_num=0)
+        prev_n_const = read_values(wb_name, 30, 10, 8, sheet_num=0)
 
     workbook = load_workbook(wb_name)
     replace_values(workbook['_data']['E'][1:23], res_vals)
@@ -265,13 +255,8 @@ def update_cdap(iter_, wb_name, results, uec_path, cal_path):
         replace_values(workbook['CDAP']['C'][29:37], prev_m_const)
         replace_values(workbook['CDAP']['D'][29:37], prev_n_const)
     else:
-        uec = open_workbook(uec_path)
-        sheet = uec.sheet_by_index(1)
-        prev_m_const = [
-            sheet.cell_value(rowx=88 + idx, colx=6) for idx in range(8)]
-        prev_n_const = [
-            sheet.cell_value(rowx=88 + idx, colx=7) for idx in range(8)]
-        uec.release_resources()
+        prev_m_const = read_values(uec_path, 88, 6, 8)
+        prev_n_const = read_values(uec_path, 88, 7, 8)
         replace_values(workbook['CDAP']['C'][29:37], prev_m_const)
         replace_values(workbook['CDAP']['D'][29:37], prev_n_const)
 
@@ -280,12 +265,8 @@ def update_cdap(iter_, wb_name, results, uec_path, cal_path):
 
     exec_formulas(cal_path)
 
-    workbook = load_workbook(cal_path, data_only=True)
-    new_m_const = [workbook['CDAP'].cell(row=30 + idx, column=9).value
-                   for idx in range(8)]
-    new_n_const = [workbook['CDAP'].cell(row=30 + idx, column=10).value
-                   for idx in range(8)]
-    workbook.close()
+    new_m_const = read_values(cal_path, 30, 9, 8, sheet_num=0)
+    new_n_const = read_values(cal_path, 30, 10, 8, sheet_num=0)
 
     update_uec(uec_path, 88, 6, new_m_const)
     update_uec(uec_path, 88, 7, new_n_const)
