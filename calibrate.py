@@ -7,3 +7,24 @@ also enables looping, such that any number of calibration iterations can be run
 in sequence.
 
 """
+
+import subprocess
+from time import sleep
+
+from pykeyboard import PyKeyboard
+
+
+def launch_transcad():
+    """Startup TransCAD and set to fullscreen.
+
+    Returns
+    -------
+    proc : subprocess.Popen
+        Process where TransCAD is running.
+
+    """
+    board = PyKeyboard()
+    proc = subprocess.Popen([r'C:/Program Files/TransCAD 6.0\Tcw.exe'])
+    sleep(5)
+    board.tap_key(board.alt_key)
+    return proc
