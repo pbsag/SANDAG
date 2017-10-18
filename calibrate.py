@@ -30,3 +30,66 @@ def launch_transcad():
     board.tap_key(board.space_key)
     board.tap_key('x')
     return proc
+
+
+def setup_abm(working_directory, start_iter=1, sample_rate=None):
+    """Setup the sandag_abm with given parameters.
+
+    Parameters
+    ----------
+    working_directory : str
+        The path to the directory containing the gisdk and uec directories.
+    start_iter : int, default : 1
+        The iteration to start the process from.
+    sample_rate : float or str, default : None
+        The sample rate for the given starting iteration, or a string
+        representing all of the sample rates.
+
+    """
+    rates = ['0.2', '0.5', '1.0']
+    if sample_rate:
+        if isinstance(sample_rate, float):
+            rates[start_iter - 1] = str(sample_rate)
+            sample_rates = ','.join(rates)
+        elif isinstance(sample_rate, str):
+            sample_rates = sample_rate
+        else:
+            raise TypeError('Type of sample_rate must be float or string.')
+
+    mouse = PyMouse()
+    board = PyKeyboard()
+    xdim, ydim = mouse.screen_size()
+    mouse.click(int(round(xdim * 0.55595)), int(round(ydim * 0.04952)))
+    sleep(0.5)
+    board.type_string('sandag_abm.lst')
+    board.tap_key(board.tab_key, n=4)
+    board.tap_key(board.enter_key)
+    board.type_string(working_directory + '/gisdk')
+    sleep(0.2)
+    board.tap_key(board.enter_key)
+    board.tap_key(board.tab_key, n=8)
+    sleep(0.5)
+    board.tap_key(board.enter_key)
+    mouse.click(int(round(xdim * 0.57083)), int(round(ydim * 0.04952)))
+    sleep(0.2)
+    board.press_keys([board.alt_key, 'd'])
+    board.press_keys([board.alt_key, 'n'])
+    board.type_string('Setup Scenario')
+    board.tap_key(board.enter_key)
+    sleep(0.2)
+    board.tap_key(board.space_key)
+    sleep(5)
+    board.tap_key(board.tab_key, n=22)
+    board.tap_key(board.space_key)
+    if start_iter == 1:
+        board.tap_key(board.tab_key, n=7)
+    else:
+        board.tap_key(board.tab_key, n=2 + start_iter)
+        board.tap_key(board.space_key)
+        board.tap_key(board.tab_key, n=5 - start_iter)
+    if sample_rate:
+        board.tap_key(board.backspace_key)
+        board.type_string(sample_rates)
+    board.tap_key(board.tab_key)
+    board.tap_key(board.space_key)
+    sleep(1)
