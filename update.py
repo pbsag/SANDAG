@@ -159,6 +159,37 @@ def update_ao(iter_, wb_name, results, uec_path, cal_path):
     ao_uec.release_resources()
 
 
+def update_uec(uec_path, startx, starty, values, axis=0, sheet_num=1):
+    """Update a uec file column starting at the given cell with the new values.
+
+    Parameters
+    ----------
+    uec_path : string
+        Path to the uec file.
+    startx : int
+        Starting cell row index.
+    starty : int
+        Starting cell column index.
+    values : array-like
+        Values to update.
+    axis : int, default : 0
+        The axis to update values along. Rows = 0, columns = 1.
+    sheet_num : int, default : 1
+        The sheet number to use.
+
+    """
+    uec = open_workbook(uec_path, formatting_info=True)
+    workbook = copy(uec)
+    sheet = workbook.get_sheet(sheet_num)
+    if axis == 0:
+        for idx, val in enumerate(values):
+            sheet.write(startx + idx, starty, val)
+    else:
+        for idx, val in enumerate(values):
+            sheet.write(startx, starty + idx, val)
+    uec.release_resources()
+
+
 def update_cdap(iter_, wb_name, results, uec_path, cal_path):
     """Aggregate model results, calculate constants, and update the UEC.
 
