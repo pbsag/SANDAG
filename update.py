@@ -91,15 +91,16 @@ def update(iter_, input_path, output_path, method='AO'):
         'CDAP': ['CoordinatedDailyActivityPattern', 'personData_3',
                  '2_CDAP Calibration', update_cdap]}
 
-    cal_path = output_path + f'/{files[method][2]}_{iter_}.xlsx'
-    uec_path = input_path + f'/uec/{files[method][0]}.xls'
-    shutil.copy2(input_path + f'/output/{files[method][1]}.csv',
-                 output_path + f'/{files[method][1]}_{iter_}.csv')
-    results = pd.read_csv(output_path + f'/{files[method][1]}_{iter_}.csv')
+    cal_path = output_path + '/{}_{}.xlsx'.format(files[method][2], iter_)
+    uec_path = input_path + '/uec/{}.xls'.format(files[method][0])
+    shutil.copy2(input_path + '/output/{}.csv'.format(files[method][1]),
+                 output_path + '/{}_{}.csv'.format(files[method][1], iter_))
+    results = pd.read_csv(
+        output_path + '/{}_{}.csv'.format(files[method][1], iter_))
     if iter_ < 1:
-        wb_name = output_path + f'/{files[method][2]}.xlsx'
+        wb_name = output_path + '/{}.xlsx'.format(files[method][2])
     else:
-        wb_name = output_path + f'/{files[method][2]}_{iter_ - 1}.xlsx'
+        wb_name = output_path + '/{}_{iter_ - 1}.xlsx'.format(files[method][2])
     files[method][3](iter_, wb_name, results, uec_path, cal_path)
 
 
