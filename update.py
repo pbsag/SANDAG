@@ -185,6 +185,42 @@ def update_uec(uec_path, startx, starty, values, axis=0, sheet_num=1):
     uec.release_resources()
 
 
+def read_values(filename, startx, starty, length, axis=0, sheet_num=1):
+    """Read data from a uec file starting at the given cell.
+
+    Parameters
+    ----------
+    filename : string
+        Path to the uec file.
+    startx : int
+        Starting cell row index.
+    starty : int
+        Starting cell column index.
+    length : int
+        The number of values to read.
+    axis : int, default : 0
+        The axis to update values along. Rows = 0, columns = 1.
+    sheet_num : int, default : 1
+        The sheet number to use.
+
+    Returns
+    -------
+    vals : array-like
+        Array of constants read from uec file.
+
+    """
+    uec = open_workbook(filename)
+    sheet = uec.sheet_by_index(sheet_num)
+    if axis == 0:
+        vals = [sheet.cell_value(rowx=startx + idx, colx=starty)
+                for idx in range(length)]
+    else:
+        vals = [sheet.cell_value(rowx=startx, colx=starty + idx)
+                for idx in range(length)]
+    uec.release_resources()
+    return vals
+
+
 def update_cdap(iter_, wb_name, results, uec_path, cal_path):
     """Aggregate model results, calculate constants, and update the UEC.
 
