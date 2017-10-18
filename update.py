@@ -100,7 +100,8 @@ def update(iter_, input_path, output_path, method='AO'):
     if iter_ < 1:
         wb_name = output_path + '/{}.xlsx'.format(files[method][2])
     else:
-        wb_name = output_path + '/{}_{iter_ - 1}.xlsx'.format(files[method][2])
+        wb_name = output_path + \
+            '/{}_{}.xlsx'.format(files[method][2], iter_ - 1)
     files[method][3](iter_, wb_name, results, uec_path, cal_path)
 
 
