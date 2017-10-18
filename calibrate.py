@@ -11,6 +11,7 @@ in sequence.
 import subprocess
 from time import sleep
 
+from pymouse import PyMouse
 from pykeyboard import PyKeyboard
 
 
