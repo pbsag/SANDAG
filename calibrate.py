@@ -27,4 +27,6 @@ def launch_transcad():
     proc = subprocess.Popen([r'C:/Program Files/TransCAD 6.0\Tcw.exe'])
     sleep(5)
     board.tap_key(board.alt_key)
+    board.tap_key(board.space_key)
+    board.tap_key('x')
     return proc
