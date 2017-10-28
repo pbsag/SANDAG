@@ -53,6 +53,36 @@ def launch_transcad():
     return proc
 
 
+def compile_abm(working_directory):
+    """Compile the sandag_abm.
+
+    Parameters
+    ----------
+    working_directory : str
+        The path to the directory containing the gisdk and uec directories.
+
+    """
+    mouse = PyMouse()
+    board = PyKeyboard()
+    xdim, ydim = mouse.screen_size()
+    mouse.click(int(round(xdim * 0.55595)), int(round(ydim * 0.04952)))
+    sleep(.5)
+    board.type_string('sandag_abm.lst')
+    sleep(.5)
+    board.tap_key(board.tab_key, n=4)
+    sleep(.5)
+    board.tap_key(board.enter_key)
+    sleep(.5)
+    board.type_string(working_directory + '/gisdk')
+    sleep(.5)
+    board.tap_key(board.enter_key)
+    sleep(.5)
+    board.tap_key(board.tab_key, n=8)
+    sleep(.5)
+    board.tap_key(board.enter_key)
+    sleep(2)
+
+
 def setup_abm(working_directory, start_iter=1, sample_rate=None):
     """Setup the sandag_abm with given parameters.
 
@@ -77,20 +107,11 @@ def setup_abm(working_directory, start_iter=1, sample_rate=None):
         else:
             raise TypeError('Type of sample_rate must be float or string.')
 
+    compile_abm(working_directory)
+
     mouse = PyMouse()
     board = PyKeyboard()
     xdim, ydim = mouse.screen_size()
-    mouse.click(int(round(xdim * 0.55595)), int(round(ydim * 0.04952)))
-    sleep(0.5)
-    board.type_string('sandag_abm.lst')
-    board.tap_key(board.tab_key, n=4)
-    board.tap_key(board.enter_key)
-    board.type_string(working_directory + '/gisdk')
-    sleep(0.2)
-    board.tap_key(board.enter_key)
-    board.tap_key(board.tab_key, n=8)
-    sleep(0.5)
-    board.tap_key(board.enter_key)
     mouse.click(int(round(xdim * 0.57083)), int(round(ydim * 0.04952)))
     sleep(0.2)
     board.press_keys([board.alt_key, 'd'])
