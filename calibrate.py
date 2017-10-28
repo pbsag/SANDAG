@@ -212,14 +212,14 @@ def calibrate(working_directory, start_iter=1, sample_rate=None, max_iters=3,
         representing all of the sample rates.
     max_iters : int, default : 3
         The maximum number of iterations to run for each step.
-    iput_path : str, default : '.'
+    input_path : str, default : '.'
         The relative path to the output and uec directories.
     output_path : str, default : '../Model Calibration'
         The relative path to the directory containing the calibration
         directories.
 
     """
-    steps = ['AO', 'CDAP', 'DC', 'MC', 'ML', 'TR', 'AS']
+    steps = ['AO', 'CDAP']
     for step in steps:
         cal_path = output_path + '/{}'.format(FILES[step][2])
         update(0, input_path, cal_path, method=step)
