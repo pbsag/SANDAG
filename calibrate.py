@@ -83,6 +83,37 @@ def compile_abm(working_directory):
     sleep(2)
 
 
+def check_rate(start_iter, sample_rate):
+    """Check the validity of the entered sample_rate.
+
+    Parameters
+    ----------
+    start_iter : int
+        The iteration to start the process from.
+    sample_rate : float or str
+        The sample rate for the given starting iteration, or a string
+        representing all of the sample rates.
+
+    Returns
+    -------
+    sample_rates : str or None
+        The values of the sample rates in a comma separated string or None if
+        using defaults.
+
+    """
+    rates = ['0.2', '0.5', '1.0']
+    sample_rates = None
+    if sample_rate:
+        if isinstance(sample_rate, float):
+            rates[start_iter - 1] = str(sample_rate)
+            sample_rates = ','.join(rates)
+        elif isinstance(sample_rate, str):
+            sample_rates = sample_rate
+        else:
+            raise TypeError('Type of sample_rate must be float or string.')
+    return sample_rates
+
+
 def set_abm_params(start_iter, sample_rates):
     """Set the parameters for the sandag_abm.
 
@@ -137,17 +168,7 @@ def setup_abm(working_directory, start_iter=1, sample_rate=None):
         representing all of the sample rates.
 
     """
-    rates = ['0.2', '0.5', '1.0']
-    sample_rates = None
-    if sample_rate:
-        if isinstance(sample_rate, float):
-            rates[start_iter - 1] = str(sample_rate)
-            sample_rates = ','.join(rates)
-        elif isinstance(sample_rate, str):
-            sample_rates = sample_rate
-        else:
-            raise TypeError('Type of sample_rate must be float or string.')
-
+    sample_rates = check_rate(start_iter, sample_rate)
     compile_abm(working_directory)
     set_abm_params(start_iter, sample_rates)
 
