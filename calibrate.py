@@ -83,6 +83,46 @@ def compile_abm(working_directory):
     sleep(2)
 
 
+def set_abm_params(start_iter, sample_rates):
+    """Set the parameters for the sandag_abm.
+
+    Parameters
+    ----------
+    start_iter : int
+        The iteration to start the process from.
+    sample_rates : str or None
+        The sample rates for the abm in string form.
+
+    """
+    mouse = PyMouse()
+    board = PyKeyboard()
+    xdim, ydim = mouse.screen_size()
+    mouse.click(int(round(xdim * 0.57083)), int(round(ydim * 0.04952)))
+    sleep(1)
+    board.press_keys([board.alt_key, 'd'])
+    board.press_keys([board.alt_key, 'n'])
+    board.type_string('Setup Scenario')
+    board.tap_key(board.enter_key)
+    sleep(0.2)
+    board.tap_key(board.space_key)
+    sleep(5)
+    # Set database write to 'No'
+    board.tap_key(board.tab_key, n=22)
+    board.tap_key(board.space_key)
+    if start_iter == 1:
+        board.tap_key(board.tab_key, n=7)
+    else:
+        board.tap_key(board.tab_key, n=2 + start_iter)
+        board.tap_key(board.space_key)
+        board.tap_key(board.tab_key, n=5 - start_iter)
+    if sample_rates:
+        board.tap_key(board.backspace_key)
+        board.type_string(sample_rates)
+    board.tap_key(board.tab_key)
+    board.tap_key(board.space_key)
+    sleep(1)
+
+
 def setup_abm(working_directory, start_iter=1, sample_rate=None):
     """Setup the sandag_abm with given parameters.
 
@@ -98,6 +138,7 @@ def setup_abm(working_directory, start_iter=1, sample_rate=None):
 
     """
     rates = ['0.2', '0.5', '1.0']
+    sample_rates = None
     if sample_rate:
         if isinstance(sample_rate, float):
             rates[start_iter - 1] = str(sample_rate)
@@ -108,33 +149,7 @@ def setup_abm(working_directory, start_iter=1, sample_rate=None):
             raise TypeError('Type of sample_rate must be float or string.')
 
     compile_abm(working_directory)
-
-    mouse = PyMouse()
-    board = PyKeyboard()
-    xdim, ydim = mouse.screen_size()
-    mouse.click(int(round(xdim * 0.57083)), int(round(ydim * 0.04952)))
-    sleep(0.2)
-    board.press_keys([board.alt_key, 'd'])
-    board.press_keys([board.alt_key, 'n'])
-    board.type_string('Setup Scenario')
-    board.tap_key(board.enter_key)
-    sleep(0.2)
-    board.tap_key(board.space_key)
-    sleep(5)
-    board.tap_key(board.tab_key, n=22)
-    board.tap_key(board.space_key)
-    if start_iter == 1:
-        board.tap_key(board.tab_key, n=7)
-    else:
-        board.tap_key(board.tab_key, n=2 + start_iter)
-        board.tap_key(board.space_key)
-        board.tap_key(board.tab_key, n=5 - start_iter)
-    if sample_rate:
-        board.tap_key(board.backspace_key)
-        board.type_string(sample_rates)
-    board.tap_key(board.tab_key)
-    board.tap_key(board.space_key)
-    sleep(1)
+    set_abm_params(start_iter, sample_rates)
 
 
 def launch_abm(working_directory):
