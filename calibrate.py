@@ -20,6 +20,29 @@ from pykeyboard import PyKeyboard
 from update import update
 
 
+def check_positive(value):
+    """Check if value is a positive number.
+
+    This function is for use with argparse `type` kwarg to ensure positive
+    integers.
+
+    Parameters
+    ----------
+    value : float or int
+        Number to ensure as positive.
+
+    Returns
+    -------
+    ivalue : int
+        Positive integer of value.
+
+    """
+    ivalue = int(value)
+    if ivalue <= 0:
+        raise argparse.ArgumentTypeError("Value must be a positive integer.")
+    return ivalue
+
+
 PARSER = argparse.ArgumentParser(
     description='Execute calibration of Auto Ownership and Coordinated Daily '
     'Activity Pattern steps.')
@@ -38,7 +61,7 @@ PARSER.add_argument(
     'all of the sample rates'
 )
 PARSER.add_argument(
-    '-mi', '--max_iters', metavar='Max_Iters', type=int, default=3,
+    '-mi', '--max_iters', metavar='Max_Iters', type=check_positive, default=3,
     help='The maximum number of calibration iterations to run for each step.'
 )
 PARSER.add_argument(
