@@ -295,3 +295,9 @@ def calibrate(working_directory, start_iter=1, sample_rate=None, max_iters=3,
             update(iter_ + 1, input_path, cal_path, method=step)
             print('Completed Step {} iteration {}.\n'
                   .format(FILES[step][0], iter_ + 1))
+
+
+if __name__ == '__main__':
+    calibrate(ARGS.working_directory, start_iter=ARGS.start_iter,
+              sample_rate=ARGS.sample_rate, max_iters=ARGS.max_iters,
+              input_path=ARGS.input_path, output_path=ARGS.output_path)
