@@ -43,6 +43,25 @@ def check_positive(value):
     return ivalue
 
 
+def check_float(value):
+    """Check if value is a float or string.
+
+    Parameters
+    ----------
+    value : string
+        Value to determine if string should be a float or string.
+
+    Returns
+    -------
+    value : float or string
+        Value as a float or string.
+    """
+    if ',' in value:
+        return value
+    value = float(value)
+    return value
+
+
 PARSER = argparse.ArgumentParser(
     description='Execute calibration of Auto Ownership and Coordinated Daily '
     'Activity Pattern steps.')
