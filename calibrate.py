@@ -245,6 +245,7 @@ def launch_abm(working_directory):
     board.tap_key(board.tab_key, n=3)
     board.tap_key(board.enter_key)
     board.type_string(working_directory)
+    sleep(4)
     board.tap_key(board.enter_key)
     sleep(2)
     board.tap_key(board.tab_key, n=6)
