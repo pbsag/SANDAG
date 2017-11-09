@@ -75,7 +75,7 @@ PARSER.add_argument(
     help='The iteration of the abm on which to start.', choices=[1, 2, 3]
 )
 PARSER.add_argument(
-    '-sr', '--sample_rate', metavar='Sample_Rate',
+    '-sr', '--sample_rate', metavar='Sample_Rate', type=check_float,
     help='The sample rate for the starting iteration or a string representing '
     'all of the sample rates'
 )
