@@ -100,6 +100,16 @@ FILES = {'AO': ['AutoOwnership', 'aoResults.csv', '1_AO'],
 
 
 def kill_proc_tree(pid, including_parent=True):
+    """Kill a process and all of its children.
+
+    Parameters
+    ----------
+    pid : int
+        The process id of the process to kill all children from.
+    including_parent : bool
+        Boolean representing wether to also kill the parent process.
+
+    """
     parent = psutil.Process(pid)
     children = parent.children(recursive=True)
     for child in children:
