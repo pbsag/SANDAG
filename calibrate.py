@@ -310,10 +310,12 @@ def calibrate(working_directory, start_iter=1, sample_rate=None, max_iters=3,
             launch_abm(working_directory)
             start_time = time()
             sleep(18000)
-            last_mod = osp.getmtime(FILES[step][1].format(start_iter))
+            result_file = input_path + '/output/' + FILES[step][1]\
+                .format(start_iter)
+            last_mod = osp.getmtime(result_file)
             while last_mod < start_time:
                 sleep(1800)
-                last_mod = osp.getmtime(FILES[step][1].format(start_iter))
+                last_mod = osp.getmtime(result_file)
             kill_proc_tree(proc.pid, including_parent=True)
             update(iter_ + 1, input_path, cal_path, method=step)
             print('Completed Step {} iteration {}.\n'
