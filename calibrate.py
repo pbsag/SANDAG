@@ -68,30 +68,24 @@ PARSER = argparse.ArgumentParser(
 PARSER.add_argument(
     'working_directory', metavar='Working_Directory', type=str,
     help='The absolute path to the directory containing the gisdk and uec '
-    'directories.'
-)
+    'directories.')
 PARSER.add_argument(
     '-si', '--start_iter', metavar='Start_Iteration', type=int, default=1,
-    help='The iteration of the abm on which to start.', choices=[1, 2, 3]
-)
+    help='The iteration of the abm on which to start.', choices=[1, 2, 3])
 PARSER.add_argument(
     '-sr', '--sample_rate', metavar='Sample_Rate', type=check_float,
     help='The sample rate for the starting iteration or a string representing '
-    'all of the sample rates'
-)
+    'all of the sample rates')
 PARSER.add_argument(
     '-mi', '--max_iters', metavar='Max_Iters', type=check_positive, default=3,
-    help='The maximum number of calibration iterations to run for each step.'
-)
+    help='The maximum number of calibration iterations to run for each step.')
 PARSER.add_argument(
     '-ip', '--input_path', metavar='Input_Path', type=str, default='.',
-    help='The relative path to the output and uec directories.'
-)
+    help='The relative path to the output and uec directories.')
 PARSER.add_argument(
     '-op', '--output_path', metavar='Output_Path', type=str,
     default='../Model Calibration', help='The relative path to the directory '
-    'containing the calibration directories.'
-)
+    'containing the calibration directories.')
 ARGS = PARSER.parse_args()
 
 FILES = {'AO': ['AutoOwnership', 'aoResults.csv', '1_AO'],
