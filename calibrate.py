@@ -64,7 +64,7 @@ def check_float(value):
     try:
         value = float(value)
     except ValueError:
-        raise argparse.ArgumentTypeError('Value must be a number.') 
+        raise argparse.ArgumentTypeError('Value must be a number.')
     return value
 
 
