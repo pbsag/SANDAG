@@ -37,7 +37,10 @@ def check_positive(value):
         Positive integer of value.
 
     """
-    ivalue = int(value)
+    try:
+        ivalue = int(value)
+    except ValueError:
+        raise argparse.ArgumentTypeError("Value must be a positive integer.")
     if ivalue <= 0:
         raise argparse.ArgumentTypeError("Value must be a positive integer.")
     return ivalue
@@ -58,7 +61,10 @@ def check_float(value):
     """
     if ',' in value:
         return value
-    value = float(value)
+    try:
+        value = float(value)
+    except ValueError:
+        raise argparse.ArgumentTypeError('Value must be a number.') 
     return value
 
 
